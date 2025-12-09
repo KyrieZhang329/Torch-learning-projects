@@ -12,9 +12,8 @@ def main():
     
     model = HandwritingNet().to(device)
     model = load_model_weights(model, config.MODEL_SAVE_PATH)
-    print("模型加载成功")
     
-    test_folders = ['./numerals/num_1', './numerals/num_2', './numerals/yh']
+    test_folders = ['./numerals/cy', './numerals/zsy', './numerals/gzy']
     
     for folder in test_folders:
         if os.path.exists(folder):

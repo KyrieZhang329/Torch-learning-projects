@@ -3,7 +3,7 @@ import torchvision
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import os
-from PIL import Image
+from PIL import Image, ImageOps
 import config
 
 
@@ -55,7 +55,9 @@ def load_model_weights(model, model_path=config.MODEL_SAVE_PATH):
 
 def predict_single_image(image_path, model, device='cpu'):
     img = Image.open(image_path).convert('L')
-    
+
+    img = ImageOps.invert(img)
+    img = img.point(lambda x: 255 if x > 100 else 0)
     transform = transforms.Compose([
         transforms.Resize((28, 28)),
         transforms.ToTensor(),
@@ -64,7 +66,7 @@ def predict_single_image(image_path, model, device='cpu'):
     
     img_tensor = transform(img)
     img_tensor = img_tensor.unsqueeze(0).to(device)
-    
+
     model.eval()
     with torch.no_grad():
         output = model(img_tensor)
